@@ -1,6 +1,7 @@
 'use strict';
 
 var FeedAnalyser = {
+
     __feed: [], // Internal use only
     __analysis: { totalMentions: 0 },
     options: {},
@@ -13,18 +14,30 @@ var FeedAnalyser = {
      */
     analyse: function(feed, keywords, options){
         var self = this;
+
+        // Set the options if any have been set
         if ( options ) {
             self.options    = options;
         }
+
+        // Clean and format the feed nad keywords as we need them
         self.feed       = self.cleanFeed(feed);
         self.keywords   = self.cleanKeywords(keywords);
 
+        // Initialise the promise that is returned
         return new Promise(function(resolve, reject) {
             self.__feed = [];
 
             // Loop through each of the feed items
             for( let i = 0; i < self.feed.length; ++i) {
-                self.__feed.push({text: self.feed[i], mentions: 0});
+
+                // If it's just a string, make an object
+                if ( typeof feed[i] == 'string' ) {
+                    self.__feed.push({text: feed[i], mentions: 0});
+                } else {
+                    self.__feed.push(feed[i]);
+                    self.__feed[i].mentions = 0;
+                }
 
                 // Loop through each of the keywords
                 for( let k = 0; k < self.keywords.length; ++k ){
@@ -36,14 +49,19 @@ var FeedAnalyser = {
                 }
             }
 
+            // Return the feed
             self.__analysis.feed = self.__feed;
             self.__analysis.qualityScore = self.qualityScore();
 
+            // Resolve with the analysis
             resolve(self.__analysis);
-
         });
     },
 
+    /**
+     * Return a score based on the number of tweets with mentions and the mention count
+     * @return {float} Floating point number with 3 decimal places
+     */
     qualityScore: function(){
         // total number of mentions * (tweets that has mentions / 10)
         var mentionedFactor = 0;
@@ -55,34 +73,6 @@ var FeedAnalyser = {
         }
 
         return parseFloat(this.__analysis.totalMentions * mentionedFactor).toFixed(3);
-
-        //
-        // Thanks to Keith @EasyCookMag for the kind review on behalf of @bbcgoodfood Magazine out now Includes great chocolate pudding recipe @DianaHenryFood 😀\
-        // 1 ingredient
-        //
-        // Batch cooking Sunday - low fat turkey burgers from this months @bbcgoodfood mag column by @thebodycoach 🦃🍔
-        // 2 ingredients
-        // 1 technique
-        //
-        // These coffee & walnut flapjacks will cure your caffeine cravings...
-        // 3 ingredients
-        //
-        // Starting a new weight loss plan? Read this first: https://www.bbcgoodfood.com/howto/guide/six-things-you-should-consider-starting-diet … #diet #weightloss
-        // 0
-        //
-        // .@DianaHenryFood's tender beer-soaked ham with all the trimmings is our perfect Sunday feast...
-        //
-        //
-        // That's Monday's breakfast sorted! Wholemeal fruit & seed breakfast muffins:
-        //
-        //
-        // I love baking, it's fun
-        //
-        // tonight I'm having chicken for dinner
-        //
-        // tonight I'm having roast chicken for dinner
-        //
-        // I love roasting, it's fun. Tongiht I'm having roast chicken
     },
 
     cleanFeed: function( feed ){
