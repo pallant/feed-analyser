@@ -1,8 +1,5 @@
 var FeedAnalyser = require('./index.js');
 
-// var feed = [ { id: 123123, text: 'Hello my name is joel and I work for simon and ben'}, {text: 'I work with arran'}, {id: 123, text: 'ben works in chichester'}];
-// var keywords = ['joel','arran','simon','ben'];
-
 var feed = [
     "Took longer than two hours to prepare this. And I opted for white wine afterwards. In a glass",
     "At last — a diet for those of us that struggle with discipline http://thetim.es/2mAajON",
