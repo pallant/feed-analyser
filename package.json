@@ -1,6 +1,6 @@
 {
   "name": "feed-analyser",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Analyses a feed against a list of keywords",
   "main": "index.js",
   "scripts": {
@@ -8,11 +8,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/PallantDigital/twitter-feed-analyser.git"
+    "url": "git+ssh://git@bitbucket.org/PallantDigital/feed-analyser.git"
   },
   "author": "",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/PallantDigital/twitter-feed-analyser#readme",
+  "homepage": "https://bitbucket.org/PallantDigital/feed-analyser#readme",
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^3.2.0"
