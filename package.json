@@ -1,0 +1,20 @@
+{
+  "name": "feed-analyser",
+  "version": "1.0.0",
+  "description": "Analyses a feed against a list of keywords",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/PallantDigital/twitter-feed-analyser.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/PallantDigital/twitter-feed-analyser#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  }
+}
