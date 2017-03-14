@@ -8,11 +8,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/PallantDigital/feed-analyser.git"
+    "url": "git+ssh://git@github.com:pallant/feed-analyser.git"
   },
   "author": "",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/PallantDigital/feed-analyser#readme",
+  "homepage": "https://github.com/pallant/feed-analyser",
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^3.2.0"
