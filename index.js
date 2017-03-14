@@ -3,6 +3,7 @@
 var FeedAnalyser = {
     __feed: [], // Internal use only
     __analysis: { totalMentions: 0 },
+    options: {},
 
     /**
      * Perform the analysis of the feeds using the keywords
@@ -10,8 +11,11 @@ var FeedAnalyser = {
      * @param  {array} keywords Array of string keywords to look for in the feed
      * @return {Promise}        Returns a promise that is resolved with the analysis and rejected with any errors
      */
-    analyse: function(feed, keywords){
+    analyse: function(feed, keywords, options){
         var self = this;
+        if ( options ) {
+            self.options    = options;
+        }
         self.feed       = self.cleanFeed(feed);
         self.keywords   = self.cleanKeywords(keywords);
 
@@ -82,7 +86,20 @@ var FeedAnalyser = {
     },
 
     cleanFeed: function( feed ){
-        return this.cleanArray(feed);
+        var cleanFeed = [];
+
+        // If the feed isn't an object and the text we want is at a specific key
+        // i.e. [ {id: 12132, text: "this is the actual feed text"} ]
+        if ( typeof this.options.feedKey != 'undefined' ) {
+            for( let i; i < feed.length; ++i ){
+                cleanFeed.push(feed[i][this.options.feedKey]);
+            }
+        }
+        else {
+            cleanFeed = feed;
+        }
+
+        return this.cleanArray(cleanFeed);
     },
 
     cleanKeywords: function( keywords ){
