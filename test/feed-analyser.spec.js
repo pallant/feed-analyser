@@ -34,13 +34,6 @@ describe('FeedAnalyser', function(){
         })
     });
 
-    describe('cleanFeed', function(){
-        it('should return a cleaned feed', function(){
-            let cleanedFeed = FeedAnalyser.cleanFeed(['ØnE','tWœ','ThRêe']);
-
-            expect(cleanedFeed).to.deep.equal(['one','two','three']);
-        })
-    });
 
 
     describe('analyse', function(){
@@ -62,10 +55,26 @@ describe('FeedAnalyser', function(){
         });
 
         it('should return a valid quality score', function(){
-            return FeedAnalyser.analyse(demoFeed,demoKeywords).then(function(){
+            return FeedAnalyser.analyse(demoFeed,demoKeywords).then(function(a){
                 expect(FeedAnalyser.qualityScore()).to.equal('1.500');
             });
         });
+    });
+
+
+    describe('cleanFeed', function(){
+        it('should return a cleaned feed', function(){
+            let cleanedFeed = FeedAnalyser.cleanFeed(['ØnE','tWœ','ThRêe']);
+
+            expect(cleanedFeed).to.deep.equal(['one','two','three']);
+        });
+
+        it('should return a cleaned feed with feedKey', function(){
+            FeedAnalyser.options.feedKey = 'text';
+            let cleanedFeed = FeedAnalyser.cleanFeed([{'text': 'ØnE'},{'text': 'tWœ'},{'text': 'ThRêe'}]);
+
+            expect(cleanedFeed).to.deep.equal(['one','two','three']);
+        })
     });
 
 });
