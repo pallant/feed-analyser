@@ -1,10 +1,20 @@
 'use strict';
-
+/**
+ * FeedAnalyser looks at a feed of text and scores them based on a set of keywords.
+ * @type {Object}
+ */
 var FeedAnalyser = {
 
     __feed: [], // Internal use only
     __analysis: { totalMentions: 0 },
-    options: {},
+    options: {
+        /*
+            feedKey: 'text',
+            keywordOccurences: function(item, keyword) { return item.includes(keyword); },
+            cleanString: function(str) { return str.toLowerCase(); }
+            qualityScore: function() { return this.__analysis.totalMentions; }
+        */
+    },
 
     /**
      * Perform the analysis of the feeds using the keywords
@@ -40,12 +50,11 @@ var FeedAnalyser = {
                 }
 
                 // Loop through each of the keywords
-                for( let k = 0; k < self.keywords.length; ++k ){
+                for( let k = 0; k < self.keywords.length; ++k ) {
                     // If the word is contained in the feed item, increment the mentions
-                    if ( self.feed[i].includes(self.keywords[k]) ) {
-                        self.__feed[i].mentions += 1;
-                        self.__analysis.totalMentions += 1
-                    }
+                    let occurrences                 = self.keywordOccurences(self.feed[i], self.keywords[k]);
+                    self.__feed[i].mentions        += occurrences;
+                    self.__analysis.totalMentions  += occurrences;
                 }
             }
 
@@ -59,10 +68,62 @@ var FeedAnalyser = {
     },
 
     /**
+     * Function to determine whether a keyword is in an item or not
+     * @example compareItem: function(item, keyword) { return item.includes(keyword); }
+     * @param  {string} item    The feed item to test
+     * @param  {string} keyword The keyword to look for
+     * @return {integer}        The number of times the keyword occurs in the item
+     */
+    keywordOccurences: function(item, keyword){
+
+        // Run the custom compareItem function if it's specified
+        if ( typeof this.options.keywordOccurences == 'function' ) {
+            return this.options.keywordOccurences.bind(this)(item, keyword);
+        }
+
+        // Default compareItem functionality
+        return this.stringOccurrences(item,keyword);
+    },
+
+    /** Function that count occurrences of a substring in a string;
+     * @param {String} string               The string
+     * @param {String} subString            The sub string to search for
+     * @param {Boolean} [allowOverlapping]  Optional. (Default:false)
+     *
+     * @author Vitim.us https://gist.github.com/victornpb/7736865/edit
+     * @see Unit Test https://jsfiddle.net/Victornpb/5axuh96u/
+     * @see http://stackoverflow.com/questions/4009756/how-to-count-string-occurrence-in-string/7924240#7924240
+     */
+    stringOccurrences: function(string, subString, allowOverlapping) {
+
+        string += "";
+        subString += "";
+        if (subString.length <= 0) return (string.length + 1);
+
+        var n = 0,
+            pos = 0,
+            step = allowOverlapping ? 1 : subString.length;
+
+        while (true) {
+            pos = string.indexOf(subString, pos);
+            if (pos >= 0) {
+                ++n;
+                pos += step;
+            } else break;
+        }
+        return n;
+    },
+
+    /**
      * Return a score based on the number of tweets with mentions and the mention count
-     * @return {float} Floating point number with 3 decimal places
+     * @return {float} Floating point number with 2 decimal places
      */
     qualityScore: function(){
+
+        if ( typeof this.options.qualityScore == 'function' ) {
+            return this.options.qualityScore.bind(this)();
+        }
+
         // total number of mentions * (tweets that has mentions / 10)
         var mentionedFactor = 0;
 
@@ -72,7 +133,8 @@ var FeedAnalyser = {
             }
         }
 
-        return parseFloat(this.__analysis.totalMentions * mentionedFactor).toFixed(3);
+        // Round to 2 decimal places
+        return Math.round( (this.__analysis.totalMentions * mentionedFactor)*100 ) / 100;
     },
 
     cleanFeed: function( feed ){
@@ -116,11 +178,17 @@ var FeedAnalyser = {
      */
     cleanString: function( str ){
 
-        if ( str ) {
+        if ( typeof str == 'string' && str.length ) {
+
+            if ( typeof this.options.cleanString == 'function' ) {
+                return this.options.cleanString.bind(this)(str);
+            }
+
+            // Default 'built-in' cleaning
             return this.removeDiacritics(str).toLowerCase();
         }
 
-        return '';
+        return str;
     },
 
 
