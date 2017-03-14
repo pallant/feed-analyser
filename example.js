@@ -4,7 +4,6 @@ var feed = ['Hello my name is joel and I work for simon and ben', 'I work with a
 var keywords = ['joel','arran','simon','ben'];
 
 
-
 // Run the analysis
 FeedAnalyser.analyse(feed, keywords)
   .then((analysis) => {

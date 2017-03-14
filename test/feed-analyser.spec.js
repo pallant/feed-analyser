@@ -1,3 +1,5 @@
+'use strict';
+
 var chai = require('chai');
 const expect = chai.expect;
 var assert = require('assert');
