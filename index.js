@@ -108,7 +108,13 @@ var FeedAnalyser = {
      * @return {string}     The cleaned string
      */
     cleanString: function( str ){
-        return this.removeDiacritics(str).toLowerCase();
+            console.log(str);
+            console.log(typeof str);
+        if ( str )
+            return this.removeDiacritics(str).toLowerCase();
+        }
+
+        return '';
     },
 
 
