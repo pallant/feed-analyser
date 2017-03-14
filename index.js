@@ -90,8 +90,8 @@ var FeedAnalyser = {
 
         // If the feed isn't an object and the text we want is at a specific key
         // i.e. [ {id: 12132, text: "this is the actual feed text"} ]
-        if ( typeof this.options.feedKey != 'undefined' ) {
-            for( let i; i < feed.length; ++i ){
+        if ( typeof this.options.feedKey !== 'undefined' ) {
+            for( let i = 0; i < feed.length; ++i ){
                 cleanFeed.push(feed[i][this.options.feedKey]);
             }
         }
@@ -125,8 +125,7 @@ var FeedAnalyser = {
      * @return {string}     The cleaned string
      */
     cleanString: function( str ){
-            console.log(str);
-            console.log(typeof str);
+
         if ( str ) {
             return this.removeDiacritics(str).toLowerCase();
         }
