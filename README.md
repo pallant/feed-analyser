@@ -1,4 +1,4 @@
-# README #
+# README
 
 Looks for mentions of keywords in a feed.
 
@@ -6,13 +6,18 @@ Looks for mentions of keywords in a feed.
 
 Make sure you run npm install
 
-```
+```bash
 npm install feed-analyser --save
 ```
 
 ## Usage
 
 ```js
+/**
+ * @param feed Array This is an array of stringsor objects to analyse
+ * @param keywords Array an array of keywords
+ * @param options Object of customisation options (see docs)
+ */
 FeedAnalyser.analyse(feed, keywords, options)
   .then((analysis) => {
       console.log({ status: 1, analysis: analysis });
@@ -26,6 +31,27 @@ FeedAnalyser.analyse(feed, keywords, options)
 ## Customisation
 
 You can customise the functionality of FeedAnalyser by supplying options.
+
+### feedKey
+If your feed isn't just an array of strings, and has other properties (e.g. a twitter feed). You can supply the key of the text to analyse.
+
+```js
+var feed = [
+    {
+        description: "This is the text I want to analyse"
+    },
+    {
+        description: "This is some more text to analyse"
+    }
+];
+
+var options = {
+    feedKey: 'description'
+}
+
+FeedAnalyser.analyse(feed, keywords, options)...
+
+```
 
 ### keywordOccurences
 This function is used to determine how many times one of the keywords occurs in one of the feed items.
