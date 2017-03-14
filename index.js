@@ -110,7 +110,7 @@ var FeedAnalyser = {
     cleanString: function( str ){
             console.log(str);
             console.log(typeof str);
-        if ( str )
+        if ( str ) {
             return this.removeDiacritics(str).toLowerCase();
         }
 
