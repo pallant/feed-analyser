@@ -5,7 +5,7 @@ const expect = chai.expect;
 var assert = require('assert');
 var FeedAnalyser = require('../index.js');
 
-const demoFeed = ['Hello my name is joel and I work for simon and ben', 'I work with arran', 'ben works in chichester'];
+const demoFeed = ['Hello my name is joel and joel works for simon and ben', 'I work with arran', 'ben works in chichester'];
 const demoKeywords = ['joel','arran','simon','ben'];
 
 describe('FeedAnalyser', function(){
@@ -51,16 +51,15 @@ describe('FeedAnalyser', function(){
 
     describe('qualityScore', function(){
         it('should return a floating point number', function(){
-            expect(FeedAnalyser.qualityScore()).to.equal('0.000');
+            expect(FeedAnalyser.qualityScore()).to.equal(0);
         });
 
         it('should return a valid quality score', function(){
             return FeedAnalyser.analyse(demoFeed,demoKeywords).then(function(a){
-                expect(FeedAnalyser.qualityScore()).to.equal('1.500');
+                expect(FeedAnalyser.qualityScore()).to.equal(1.8);
             });
         });
     });
-
 
     describe('cleanFeed', function(){
         it('should return a cleaned feed', function(){
@@ -75,6 +74,12 @@ describe('FeedAnalyser', function(){
 
             expect(cleanedFeed).to.deep.equal(['one','two','three']);
         })
+    });
+
+    describe('keywordOccurences', function(){
+        it('should return the number of occurences of a string in another string', function(){
+            expect(FeedAnalyser.keywordOccurences('one two two three three three', 'two')).to.equal(2);
+        });
     });
 
 });
