@@ -1,6 +1,9 @@
+[![Build Status](https://travis-ci.org/pallant/feed-analyser.svg?branch=master)](https://travis-ci.org/pallant/feed-analyser)
+
 # README
 
 Looks for mentions of keywords in a feed.
+
 
 ## Installation
 
