@@ -24,6 +24,8 @@ var FeedAnalyser = {
      */
     analyse: function(feed, keywords, options){
         var self = this;
+        this.__analysis.totalMentions = 0;
+        this.__feed = [];
 
         // Set the options if any have been set
         if ( options ) {
