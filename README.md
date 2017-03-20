@@ -56,7 +56,7 @@ FeedAnalyser.analyse(feed, keywords, options)...
 
 ```
 
-### keywordOccurences
+### keywordOccurrences
 This function is used to determine how many times one of the keywords occurs in one of the feed items.
 
 #### Parameters
@@ -70,7 +70,7 @@ Returns an `integer`, the number of occurrences of the keyword in the item.
 
 ```js
 var options = {
-    keywordOccurences: function(item, keyword) {
+    keywordOccurrences: function(item, keyword) {
         // Will only ever return 1 or 0
         return item.includes(keyword);
     }

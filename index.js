@@ -10,7 +10,7 @@ var FeedAnalyser = {
     options: {
         /*
             feedKey: 'text',
-            keywordOccurences: function(item, keyword) { return item.includes(keyword); },
+            keywordOccurrences: function(item, keyword) { return item.includes(keyword); },
             cleanString: function(str) { return str.toLowerCase(); }
             qualityScore: function() { return this.__analysis.totalMentions; }
         */
@@ -54,7 +54,7 @@ var FeedAnalyser = {
                 // Loop through each of the keywords
                 for( let k = 0; k < self.keywords.length; ++k ) {
                     // If the word is contained in the feed item, increment the mentions
-                    let occurrences                 = self.keywordOccurences(self.feed[i], self.keywords[k]);
+                    let occurrences                 = self.keywordOccurrences(self.feed[i], self.keywords[k]);
                     self.__feed[i].mentions        += occurrences;
                     self.__analysis.totalMentions  += occurrences;
                 }
@@ -76,44 +76,50 @@ var FeedAnalyser = {
      * @param  {string} keyword The keyword to look for
      * @return {integer}        The number of times the keyword occurs in the item
      */
-    keywordOccurences: function(item, keyword){
+    keywordOccurrences: function(item, keyword){
+        var self = this;
+        let occurrences = 0;
 
-        // Run the custom compareItem function if it's specified
-        if ( typeof this.options.keywordOccurences == 'function' ) {
-            return this.options.keywordOccurences.bind(this)(item, keyword);
+        // Run the custom keyword occurrences function if it's specified
+        if ( typeof this.options.keywordOccurrences == 'function' ) {
+            return this.options.keywordOccurrences.bind(this)(item, keyword);
         }
 
-        // Default compareItem functionality
-        return this.stringOccurrences(item,keyword);
-    },
+        // -- Default keyword occurrences functionality
 
-    /** Function that count occurrences of a substring in a string;
-     * @param {String} string               The string
-     * @param {String} subString            The sub string to search for
-     * @param {Boolean} [allowOverlapping]  Optional. (Default:false)
-     *
-     * @author Vitim.us https://gist.github.com/victornpb/7736865/edit
-     * @see Unit Test https://jsfiddle.net/Victornpb/5axuh96u/
-     * @see http://stackoverflow.com/questions/4009756/how-to-count-string-occurrence-in-string/7924240#7924240
-     */
-    stringOccurrences: function(string, subString, allowOverlapping) {
+            // Replace , . 's with spaces and remove any double spaces
+            item = item.replace(/(\.|,|\'s)/g, ' ').replace(/  /g, " ");
 
-        string += "";
-        subString += "";
-        if (subString.length <= 0) return (string.length + 1);
+            // Split by each word so we can test against each word
+            let words = item.split(' ');
 
-        var n = 0,
-            pos = 0,
-            step = allowOverlapping ? 1 : subString.length;
+            // Loop through each word to look to see if it is the keyword
+            words.forEach( (w, ind, arr) => {
+                // Exact match (cleaned)
+                if ( w.trim() == keyword ) {
+                    ++occurrences;
+                }
 
-        while (true) {
-            pos = string.indexOf(subString, pos);
-            if (pos >= 0) {
-                ++n;
-                pos += step;
-            } else break;
-        }
-        return n;
+                // Cheap plural check
+                else {
+                    // Are the last 3 letters 'ies'
+                    let ies = (w.indexOf('ies') === w.length - 3);
+
+                    // Is the last letter s?
+                    let s   = ( w[w.length-1] == 's');
+
+                    // if it's a word ending in y and replacing the y with ies makes it the keyword
+                    if ( keyword[keyword.length-1] == 'y' && (keyword.substr(0, keyword.length-1) + "ies") === w ) {
+                        ++occurrences;
+                    }
+                    // Standard keyword + s plural
+                    else if ( w.substr(0, w.length-1) == keyword && s  ) {
+                        ++occurrences;
+                    }
+                }
+            }, this);
+
+            return occurrences;
     },
 
     /**
@@ -187,7 +193,7 @@ var FeedAnalyser = {
             }
 
             // Default 'built-in' cleaning
-            return this.removeDiacritics(str).toLowerCase();
+            return this.removeDiacritics(str).toLowerCase().trim();
         }
 
         return str;
