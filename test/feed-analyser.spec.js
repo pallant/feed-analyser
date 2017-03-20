@@ -76,9 +76,9 @@ describe('FeedAnalyser', function(){
         })
     });
 
-    describe('keywordOccurences', function(){
-        it('should return the number of occurences of a string in another string', function(){
-            expect(FeedAnalyser.keywordOccurences('one two two three three three', 'two')).to.equal(2);
+    describe('keywordOccurrences', function(){
+        it('should return the number of occurrences of a string in another string', function(){
+            expect(FeedAnalyser.keywordOccurrences('one two two three three three', 'two')).to.equal(2);
         });
     });
 
