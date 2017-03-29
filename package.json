@@ -1,6 +1,6 @@
 {
   "name": "feed-analyser",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Analyses a feed against a list of keywords",
   "main": "index.js",
   "scripts": {
