@@ -45,18 +45,24 @@ var FeedAnalyser = {
 
                 // If it's just a string, make an object
                 if ( typeof feed[i] == 'string' ) {
-                    self.__feed.push({text: feed[i], mentions: 0});
+                    self.__feed.push({text: feed[i], mentions: 0, mentionedKeywords: []});
                 } else {
                     self.__feed.push(feed[i]);
                     self.__feed[i].mentions = 0;
+                    self.__feed[i].mentionedKeywords = [];
                 }
 
                 // Loop through each of the keywords
                 for( let k = 0; k < self.keywords.length; ++k ) {
+
                     // If the word is contained in the feed item, increment the mentions
                     let occurrences                 = self.keywordOccurrences(self.feed[i], self.keywords[k]);
-                    self.__feed[i].mentions        += occurrences;
-                    self.__analysis.totalMentions  += occurrences;
+
+                    if ( occurrences ) {
+                        self.__feed[i].mentions        += occurrences;
+                        self.__feed[i].mentionedKeywords[self.keywords[k]] = occurrences;
+                        self.__analysis.totalMentions  += occurrences;
+                    }
                 }
             }
 
