@@ -69,6 +69,7 @@ var FeedAnalyser = {
             // Return the feed
             self.__analysis.feed = self.__feed;
             self.__analysis.qualityScore = self.qualityScore();
+            self.__analysis.qualityScoreStr = self.qualityScore().toString();
 
             // Resolve with the analysis
             resolve(self.__analysis);
